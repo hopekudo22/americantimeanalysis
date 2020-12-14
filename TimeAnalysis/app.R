@@ -10,6 +10,7 @@ library(gt)
 library(gtsummary)
 library(ggthemes)
 library(rstanarm)
+library(broom.mixed)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
@@ -176,7 +177,7 @@ server <- function(input, output, session) {
                    "Sleep and Family Income" = formula(sleep ~ famincome),
                    "Sleep and Race" = formula(sleep ~ race),
                    "Sleep and Gender" = formula(sleep ~ sex),
-                   "Sleep and Education Level" = fomrula(sleep ~ edu))
+                   "Sleep and Education Level" = formula(sleep ~ edu))
             
         })
         
