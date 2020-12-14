@@ -1,0 +1,89 @@
+---
+title: "Regressions"
+author: "Hope Kudo"
+date: "12/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shiny)
+library(tidyverse)
+library(ggplot2)
+library(atus)
+library(shinythemes)
+library(skimr)
+library(readxl)
+library(janitor)
+library(dplyr)
+```
+
+```{r}
+data%>%
+  ggplot(aes(x = sleep, fill = famincome)) +
+  geom_histogram() +
+  facet_wrap(~ famincome) +
+  theme(axis.text = element_text(size = 5), strip.text = element_text(size = 7),
+                 panel.grid = element_blank(), panel.spacing.x = unit(3, "mm"),
+                axis.ticks = element_blank(), axis.ticks.y = element_blank()) +
+  labs(title = "Distribution of Hours Slept Based on Income",
+       subtitle = "Determining the distribution of hours slept based on family income from survey responses 2012-2016",
+       x = "Hours Slept",
+       y = "",
+       caption = "Source: ATUS data") +
+  theme_linedraw()
+```
+
+```{r regression table}
+sleepincome <- data %>%
+  ggplot(aes(x = sleep, y = famincome)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Hours of Sleep",
+       y = "Family Income ($)",
+       title = "Distribution of Hours of Sleep Linked to Income")
+
+sleeprace <- data %>%
+  ggplot(aes(x = sleep, y = race)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Hours of Sleep",
+       y = "Race",
+       title = "Distribution of Hours of Sleep Linked to Race")
+
+sleepgender <- data %>%
+  ggplot(aes(x = sleep, y = sex)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Hours of Sleep",
+       y = "Sex",
+       title = "Distribution of Hours of Sleep Linked to Sex")
+
+sleepedu <- data %>%
+  ggplot(aes(x = sleep, y = edu)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Hours of Sleep",
+       y = "Level of Education",
+       title = "Distribution of Hours of Sleep Linked to Level of Education")
+  
+```
+
+
+
+```
+
+```{r}
+
+    output$Plot2 <- renderPlot({
+        data %>%
+            filter() %>%
+            ungroup(year) %>%
+            group_by(state) %>%
+            filter(state == input$select_state) %>%
+            ggplot(aes(x = year)) +
+            labs(y = "Percent") + 
+            ggtitle(input$select_state)
+    })
+
+```
