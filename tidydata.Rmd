@@ -319,7 +319,7 @@ data %>%
 
 
 ```{r}
-write.csv(data, "50proj/fullset.csv")
+write.csv(data, "projects/americantimeanalysis/fullset.csv")
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
