@@ -31,7 +31,11 @@ ui <- navbarPage(
                              plotOutput("Plot1"))),
     sidebarPanel(
     titlePanel("Interpretation of Regression Tables"),
-                 p("Select a factor to see a regression table detailing the results"),
+                 p("Select a factor to see a regression table detailing the results. The regression tables 
+                 were created using a Bayesian generalized linear model, using stan_glm, to model the 
+                 relation between the average amount of hours slept during the night and the factors of 
+                 family income, race, sex, and education level. Refer to the Discussion tab for an analysis
+                 of these Regression tables."),
                  selectInput(inputId = "regressiontable",
                              label = "Select Factor:",
                              choices = c("Sleep and Family Income",
@@ -45,15 +49,20 @@ ui <- navbarPage(
                  plotOutput(outputId = "sleepincome"),
                  plotOutput(outputId = "sleeprace"),
                  plotOutput(outputId = "sleepgender"),
-                 plotOutput(outputId = "sleepedu")),
-                 #gt_output(outputId = "regression")),
-             fluidRow(column(12,
-                             p("The regression table was created used a Bayesian generalized linear model, 
-                               using stan_glm, to model the relation between the average amount of
-                               hours slept during the night and the factors of family income, race, sex,
-                               and education level. 
-                               Based on the results,
-                               I'm 95% confident that the true value of the")))),
+                 plotOutput(outputId = "sleepedu"))),
+    tabPanel("Discussion",
+             titlePanel("Interpreting Sleep Regression Tables"),
+             p("This section provides an analysis of the Interactive Regression Tables
+               displayed on the Sleep Models tab."),
+             h3("Sleep and Family Income"),
+             p("The first model regresses"),
+             h3("Sleep and Race"),
+             p("This model .."),
+             h3("Sleep and Gender"),
+             p("This model..."),
+             h3("Sleep and Level of Education"),
+             p("This model...")
+             ),
     
     tabPanel("State Comparison",
              fluidPage(
