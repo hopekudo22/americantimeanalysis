@@ -27,7 +27,7 @@ ui <- navbarPage(
                              h3("Distribution of Hours Slept Based on Income"),
                              h4("Determining the distribution of hours slept based on family 
                      income from survey responses 2012-2016"),
-                             plotOutput("Plot1")))),
+                             plotOutput("Plot1"))),
     sidebarPanel(
     titlePanel("Interpretation of Regression Tables"),
                  p("Select a factor to see a regression table detailing the results"),
@@ -36,21 +36,23 @@ ui <- navbarPage(
                              choices = c("Sleep and Family Income",
                                          "Sleep and Race",
                                          "Sleep and Gender",
-                                         "Sleep and Education Level"))),
+                                         "Sleep and Education Level")),
+    gt_output(outputId = "regressiontable")),
+    
              mainPanel(
-                 titlePanel("Sleep and Other Factors that Influence It"),
+                 titlePanel("Sleep and Influencing Factors"),
                  plotOutput(outputId = "sleepincome"),
                  plotOutput(outputId = "sleeprace"),
                  plotOutput(outputId = "sleepgender"),
-                 plotOutput(outputId = "sleepedu"),
-                 gt_output(outputId = "regression")),
+                 plotOutput(outputId = "sleepedu")),
+                 #gt_output(outputId = "regression")),
              fluidRow(column(12,
                              p("The regression table was created used a Bayesian generalized linear model, 
                                using stan_glm, to model the relation between the average amount of
                                hours slept during the night and the factors of family income, race, sex,
                                and education level. 
                                Based on the results,
-                               I'm 95% confident that the true value of the"))),
+                               I'm 95% confident that the true value of the")))),
     
     tabPanel("State Comparison",
              fluidPage(
@@ -169,12 +171,12 @@ server <- function(input, output, session) {
         sleepedu
     })
         
-        regressionInput <- reactive ({
-            switch(input$regression,
-                   "Sleep and Family Income" = formula(data$sleep ~ data$famincome),
-                   "Sleep and Race" = formula(data$sleep ~ data$race),
-                   "Sleep and Gender" = formula(data$sleep ~ data$sex),
-                   "Sleep and Education Level" = fomrula(data$sleep ~ data$edu))
+        regressiontableInput <- reactive ({
+            switch(input$regressiontable,
+                   "Sleep and Family Income" = formula(sleep ~ famincome),
+                   "Sleep and Race" = formula(sleep ~ race),
+                   "Sleep and Gender" = formula(sleep ~ sex),
+                   "Sleep and Education Level" = fomrula(sleep ~ edu))
             
         })
         
@@ -187,8 +189,7 @@ server <- function(input, output, session) {
                                 refresh = 0) 
             fit_obj %>%
                 tidy() %>%
-                tbl_regression() %>%
-                as_gt() %>%
+                gt() %>%
                 tab_header(title = "Regression of Factors Impact on Sleep") %>% 
                 tab_source_note("Source: ATUS data") 
             
