@@ -87,3 +87,20 @@ sleepedu <- data %>%
     })
 
 ```
+
+```{r}
+
+    tabPanel("State Comparison",
+             fluidPage(
+                 fluidRow(column(12,
+                                 h3("Time Usage Distriubtions Based on State"),
+                                 p("To further analyze the data, I filtered the information for specific states."))),
+                 fluidRow(column(12,
+                                 h4("Activities by State"),
+                                 selectizeInput(inputId = "stateInput",
+                                                label = "State",
+                                                choices = unique(fulldata$state), #add data set
+                                                selected = "Hawaii"),
+                                 plotOutput("Plot2")))
+                 ))
+```

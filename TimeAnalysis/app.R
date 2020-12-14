@@ -12,6 +12,8 @@ library(ggthemes)
 library(rstanarm)
 library(broom.mixed)
 library(MASS)
+library(leaflet)
+library(leaflet.extras)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
@@ -58,7 +60,9 @@ ui <- navbarPage(
              h3("Sleep and Family Income"),
              p("The first model regresses"),
              h3("Sleep and Race"),
-             p("This model .."),
+             p("This model demonstrates the characterist of race to sleep. It appears that 
+               
+               The Intercept is 8.8"),
              h3("Sleep and Gender"),
              p("This model..."),
              h3("Sleep and Level of Education"),
@@ -66,18 +70,15 @@ ui <- navbarPage(
              ),
     
     tabPanel("State Comparison",
-             fluidPage(
-                 fluidRow(column(12,
-                                 h3("Time Usage Distriubtions Based on State"),
-                                 p("To further analyze the data, I filtered the information for specific states."))),
-                 fluidRow(column(12,
-                                 h4("Activities by State"),
-                                 selectizeInput(inputId = "stateInput",
-                                                label = "State",
-                                                choices = unique(fulldata$state), #add data set
-                                                selected = "Hawaii"),
-                                 plotOutput("Plot2")))
-                 )),
+             mainPanel(
+               leafletOutput(outputId = "mymap"),
+               absolutePanel(top = 60, left = 20,
+                             checkboxInput("markers", "Depth", FALSE),
+                             checkboxInput("heat", "Heatmap", FALSE)
+                             )
+               
+             ),
+    )
              
   tabPanel("About",
            fluidPage(
@@ -182,6 +183,8 @@ server <- function(input, output, session) {
         sleepedu
     })
         
+    #Formulas for regression, create input in order to have dropdown options
+    
         regressiontableInput <- reactive ({
             switch(input$regressiontable,
                    "Sleep and Family Income" = formula(sleep ~ famincome),
@@ -191,6 +194,8 @@ server <- function(input, output, session) {
             
         })
         
+        #Interactive Regression Table Model
+        
         output$regressiontable <- render_gt({
             formula <- regressiontableInput()
             set.seed(100)
@@ -199,13 +204,19 @@ server <- function(input, output, session) {
                                 family = gaussian(),
                                 refresh = 0) 
             fit_obj %>%
-                #tidy() %>%
                 tbl_regression() %>%
                 as_gt() %>%
                 tab_header(title = "Regression of Factors Impact on Sleep") %>% 
                 tab_source_note("Source: ATUS data") 
             
         })
+        
+    map <- reactive ({
+      map <- fulldata %>%
+        select(state, sleep, housework, phonetime, volunteer, sports, religion, 
+               eating, shopping, research_homework, class, working, tv, druguse,
+               computeruse)
+    })
         
         #new model
         output$Plot2 <- renderPlot({

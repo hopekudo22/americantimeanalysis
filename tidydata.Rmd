@@ -222,8 +222,7 @@ summary(model1)
 
 ```{r}
 hawaii <- data %>%
-  filter(state == "HI") %>%
-  select(state, sleep)
+  filter(state == "HI") 
 
 fit_obj <- stan_glm(data = hawaii,
                     formula = sleep,
@@ -248,18 +247,136 @@ fit_obj_posterior %>%
 ```
 
 ```{r}
-alaska <- data %>%
-  filter(state == "AK") %>%
-  summarise(sleep, housework) %>%
-  mean(alaska$sleep, alaska$housework)
+# Sleep
 
-# How to get the mean of activity columns for each state
-# For Plot 2, I would like to be able to select the state and then have it display the activities in the X and hours in Y. 
-# How to make a predictor graph since some states don't have many values? 
-  
-  #summarize_if(`[<-`(data, data==0, value = NA), is.numeric, mean, na.rm = TRUE)
+sleep1 <- data %>%
+  select(state, sleep, housework, phonetime, volunteer, sports, religion, 
+         eating, shopping, research_homework, class, working, tv, druguse,
+         computeruse) %>%
+  group_by(state) %>%
+  summarise(mean(sleep)) 
 
-#activities <- summarize_if(`[<-`(data, data==0, value = NA), is.numeric, mean, na.rm = TRUE)
+# Housework
+
+housework1 <- data %>%
+  select(state, housework) %>%
+  group_by(state) %>%
+  summarise(mean(housework))
+
+combo1 <- left_join(sleep1, housework1, by = c("state"))
+
+# Phonetime
+
+phonetime1 <- data %>%
+  select(state, phonetime) %>%
+  group_by(state) %>%
+  summarise(mean(phonetime))
+
+combo2 <- left_join(combo1, phonetime1, by = c("state"))
+
+# Volunteering
+
+volunteer1 <- data %>%
+  select(state, volunteer) %>%
+  group_by(state) %>%
+  summarise(mean(volunteer))
+
+combo3 <- left_join(combo2, volunteer1, by = c("state"))
+
+# Sports
+
+sports1 <- data %>%
+  select(state, sports) %>%
+  group_by(state) %>%
+  summarise(mean(sports))
+
+combo4 <- left_join(combo3, sports1, by = c("state"))
+
+# Religion
+
+religion1 <- data %>%
+  select(state, religion) %>%
+  group_by(state) %>%
+  summarise(mean(religion))
+
+combo5 <- left_join(combo4, religion1, by = c("state"))
+
+# Eating
+
+eating1 <- data %>%
+  select(state, eating) %>%
+  group_by(state) %>%
+  summarise(mean(eating))
+
+combo6 <- left_join(combo5, eating1, by = c("state"))
+
+# Shopping
+
+shopping1 <- data %>%
+  select(state, shopping) %>%
+  group_by(state) %>%
+  summarise(mean(shopping))
+
+combo7 <- left_join(combo6, shopping1, by = c("state"))
+
+# Research and Homework
+researchhomework1 <- data %>%
+  select(state, research_homework) %>%
+  group_by(state) %>%
+  summarise(mean(research_homework))
+
+combo8 <- left_join(combo7, researchhomework1, by = c("state"))
+
+# Class
+
+class1 <- data %>%
+  select(state, class) %>%
+  group_by(state) %>%
+  summarise(mean(class))
+
+combo9 <- left_join(combo8, class1, by = c("state"))
+
+# Working
+
+working1 <- data %>%
+  select(state, working) %>%
+  group_by(state) %>%
+  summarise(mean(working))
+
+combo10 <- left_join(combo9, working1, by = c("state"))
+
+# Television Use
+
+tv1 <- data %>%
+  select(state, tv) %>%
+  group_by(state) %>%
+  summarise(mean(tv))
+
+combo11 <- left_join(combo10, tv1, by = c("state"))
+
+# Drug Use
+
+druguse1 <- data %>%
+  select(state, druguse) %>%
+  group_by(state) %>%
+  summarise(mean(druguse))
+
+combo12 <- left_join(combo11, druguse1, by = c("state"))
+
+# Computer Use
+
+computeruse1 <- data %>%
+  select(state, computeruse) %>%
+  group_by(state) %>%
+  summarise(mean(computeruse)) 
+
+combo13 <- left_join(combo12, computeruse1, by = c("state")) %>%
+    mutate("Avg Comp. Use" = mean(computeruse))
+
+combo13%>%
+  ungroup() 
+
+combo13
 ```
 # Create a distribution, x = hours, y = frequency. Create a normal histogram for each state
 # Compare states, display two plots on the page, create two different plots and set a default. Alphabetical set. Have them be automatically populated. Have two separate dropdowns. 
@@ -276,30 +393,20 @@ summary(model)
 # add a table and describe what its doing, find format from the textbook. 
 ```
 #*** = prob of getting a result this extreme given null hypotheis that sex is equal is extremely unlikely, thus, we would trust the values generated
-# Make new repo to change name.
+
 
 ```{r}
-sleepedu <- data %>%
-  ggplot(aes(x = sleep, y = edu)) +
-  geom_boxplot() +
-  theme_bw() +
-  labs(x = "Hours of Sleep",
-       y = "Level of Education",
-       title = "Distribution of Hours of Sleep Linked to Level of Education")
-  
-sleepedu
-```
-
-```{r}
-set.seed(1000)
+set.seed(15)
 fit_obj <- stan_glm(data = data,
-                    formula = sleep ~ edu,
+                    formula = sleep ~ race,
                     refresh = 0)
 #print(fit_obj, view = FALSE, digits = 5)
 
 fit_obj %>%
   tbl_regression() %>%
-  as_gt()
+  as_gt() 
+
+fit_obj
 ```
 
 
