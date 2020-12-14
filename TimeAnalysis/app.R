@@ -11,6 +11,7 @@ library(gtsummary)
 library(ggthemes)
 library(rstanarm)
 library(broom.mixed)
+library(MASS)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
@@ -198,8 +199,9 @@ server <- function(input, output, session) {
                                 family = gaussian(),
                                 refresh = 0) 
             fit_obj %>%
-                tidy() %>%
-                gt() %>%
+                #tidy() %>%
+                tbl_regression() %>%
+                as_gt() %>%
                 tab_header(title = "Regression of Factors Impact on Sleep") %>% 
                 tab_source_note("Source: ATUS data") 
             
