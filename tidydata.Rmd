@@ -1,0 +1,325 @@
+---
+title: "Cleaning Data"
+author: "Hope Kudo"
+date: "12/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shiny)
+library(tidyverse)
+library(ggplot2)
+library(atus)
+library(shinythemes)
+library(skimr)
+library(readxl)
+library(janitor)
+library(dplyr)
+library(rstanarm)
+library(gtsummary) 
+library(broom.mixed)
+library(gt)
+library(ggridges)
+```
+
+```{r}
+cps <- atuscps
+time <- atusact
+resp <- atusresp
+
+#join cpc and resp files together by respondent's ID number
+
+table <- left_join(cps, resp, by = c("tucaseid")) %>% 
+select(tucaseid, region, state, sex, age, edu, diary_mo, diary_day, race, famincome, tuyear, occup_code, labor_status, student_status,hh_size) %>%
+  filter(tuyear == c("2012", "2013", "2014", "2015", "2016")) %>%
+  distinct()
+
+```
+
+```{r}
+#Add variables as columns to dataframe
+#Sleep
+sleep <- time %>%
+  ungroup() %>% 
+  filter(tiercode == 10101)
+
+a <- left_join(table, sleep, by = c("tucaseid")) %>%
+  mutate(sleep = dur) 
+a = subset(a, select = -c(tiercode, dur)) 
+
+#Housework
+housework <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 20101, 20199))
+
+b <- left_join(a, housework, by = c("tucaseid")) %>%
+  mutate(housework = dur) 
+b = subset(b, select = -c(tiercode, dur)) 
+
+#Telephone
+phonetime <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 160101, 169989))
+
+c <- left_join(b, phonetime, by = c("tucaseid")) %>%
+  mutate(phonetime = dur) 
+c = subset(c, select = -c(tiercode, dur))
+
+#Volunteer
+volunteer <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 150101, 159989))
+
+d <- left_join(c, volunteer, by = c("tucaseid")) %>%
+    mutate(volunteer = dur) 
+d = subset(d, select = -c(tiercode, dur))
+
+#Playing Sports
+sports <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 130101, 130199))
+
+e <- left_join(d, sports, by = c("tucaseid")) %>%
+      mutate(sports = dur) 
+e = subset(e, select = -c(tiercode, dur))
+
+#Religious Activities
+religion <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 140101, 149999))
+
+f <- left_join(e, religion, by = c("tucaseid")) %>%
+      mutate(religion = dur) 
+f = subset(f, select = -c(tiercode, dur))
+
+#Eating Meals
+eating <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 110101, 119999))
+
+g <- left_join(f, eating, by = c("tucaseid")) %>%
+        mutate(eating = dur) 
+g = subset(g, select = -c(tiercode, dur))
+
+#Shopping
+shopping <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 70101, 70199))
+
+h <- left_join(g, shopping, by = c("tucaseid")) %>%
+          mutate(shopping = dur) 
+h = subset(h, select = -c(tiercode, dur))
+
+#Research and Homework
+research_homework <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 60301, 60399))
+
+i <- left_join(h, research_homework, by = c("tucaseid")) %>%
+            mutate(research_homework = dur) 
+i = subset(i, select = -c(tiercode, dur))
+
+#Classtime
+class <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 60101, 60199))
+
+j <- left_join(i, class, by = c("tucaseid")) %>%
+              mutate(class = dur) 
+j = subset(j, select = -c(tiercode, dur))
+
+#Working 
+working <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 50101, 59999))
+
+k <- left_join(j, working, by = c("tucaseid")) %>%
+              mutate(working = dur) 
+k = subset(k, select = -c(tiercode, dur))
+
+#Socializing
+socialevents <- time %>%
+  ungroup() %>% 
+  filter(between(tiercode, 120201, 120299 | 129999))
+
+l <- left_join(k, socialevents, by = c("tucaseid")) %>%
+                mutate(socialevents = dur) 
+l = subset(l, select = -c(tiercode, dur))
+
+#Television
+tv <- time %>%
+  ungroup() %>%
+  filter(between(tiercode, 120303, 120304))
+
+m <- left_join(l, tv, by = c("tucaseid")) %>%
+                mutate(tv = dur) 
+m = subset(m, select = -c(tiercode, dur))
+
+#Drug Use
+druguse <- time %>%
+  ungroup() %>% 
+  filter(tiercode == 120302)
+
+n <- left_join(m, tv, by = c("tucaseid")) %>%
+                mutate(druguse = dur) 
+n = subset(n, select = -c(tiercode, dur))
+
+#Computer Usage
+computeruse <- time %>%
+  ungroup() %>% 
+  filter(tiercode == 120308)
+
+o <- left_join(n, computeruse, by = c("tucaseid")) %>%
+                mutate(computeruse = dur) 
+o = subset(o, select = -c(tiercode, dur))
+
+#Get rid of duplicate rows
+data <- o %>%
+  distinct() 
+data <- data[!duplicated(data$tucaseid), ]
+
+#Change N/A variables to value of 0
+data$sleep[which(is.na(data$sleep))] <- 0
+data$housework[which(is.na(data$housework))] <- 0 
+data$phonetime[which(is.na(data$phonetime))] <- 0 
+data$volunteer[which(is.na(data$volunteer))] <- 0 
+data$sports[which(is.na(data$sports))] <- 0 
+data$religion[which(is.na(data$religion))] <- 0 
+data$eating[which(is.na(data$eating))] <- 0 
+data$shopping[which(is.na(data$shopping))] <- 0 
+data$research_homework[which(is.na(data$research_homework))] <- 0 
+data$class[which(is.na(data$class))] <- 0 
+data$working[which(is.na(data$working))] <- 0 
+data$tv[which(is.na(data$tv))] <- 0 
+data$computeruse[which(is.na(data$computeruse))] <- 0 
+data$druguse[which(is.na(data$druguse))] <- 0 
+
+#Change min to hours
+data$sleep <- data$sleep / 60
+data$housework <- data$housework / 60
+data$phonetime <- data$phonetime / 60
+data$volunteer <- data$volunteer / 60
+data$sports <- data$sports / 60
+data$religion <- data$religion / 60
+data$eating <- data$eating / 60
+data$shopping <- data$shopping / 60
+data$research_homework <- data$research_homework / 60
+data$class <- data$class / 60
+data$working <- data$working / 60
+data$tv <- data$tv / 60
+data$computeruse <- data$computeruse / 60
+data$druguse <- data$druguse / 60
+
+```
+
+```{r}
+model1 <- lm(data = data, 
+         eating ~ age + sex + race + famincome)
+summary(model1)
+```
+
+
+```{r}
+hawaii <- data %>%
+  filter(state == "HI") %>%
+  select(state, sleep)
+
+fit_obj <- stan_glm(data = hawaii,
+                    formula = sleep,
+                    refresh = 0)
+
+fit_obj %>%
+  tbl_regression() %>%
+  as_gt()
+
+fit_obj_posterior <- posterior_predict(fit_obj, newdata = hawaii) %>%
+  as_tibble() %>% 
+  mutate_all(as.numeric)
+
+fit_obj_posterior %>%
+
+  ggplot(aes(x = hours)) +
+  geom_histogram(aes(y = after_stat(count/sum(count))),
+    alpha = 0.5, 
+                 bins = 90, 
+                 position = "identity")
+
+```
+
+```{r}
+alaska <- data %>%
+  filter(state == "AK") %>%
+  summarise(sleep, housework) %>%
+  mean(alaska$sleep, alaska$housework)
+
+# How to get the mean of activity columns for each state
+# For Plot 2, I would like to be able to select the state and then have it display the activities in the X and hours in Y. 
+# How to make a predictor graph since some states don't have many values? 
+  
+  #summarize_if(`[<-`(data, data==0, value = NA), is.numeric, mean, na.rm = TRUE)
+
+#activities <- summarize_if(`[<-`(data, data==0, value = NA), is.numeric, mean, na.rm = TRUE)
+```
+# Create a distribution, x = hours, y = frequency. Create a normal histogram for each state
+# Compare states, display two plots on the page, create two different plots and set a default. Alphabetical set. Have them be automatically populated. Have two separate dropdowns. 
+
+# Need a statistical regression, y = hours
+
+```{r}
+model <- lm(data = data, 
+         sleep ~ state + age + sex + race)
+
+summary(model)
+
+# Make a distribution for each state, refer to exam 3, x = estimates, y = variables (states, race, income)
+# add a table and describe what its doing, find format from the textbook. 
+```
+#*** = prob of getting a result this extreme given null hypotheis that sex is equal is extremely unlikely, thus, we would trust the values generated
+# Make new repo to change name.
+
+```{r}
+sleepedu <- data %>%
+  ggplot(aes(x = sleep, y = edu)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Hours of Sleep",
+       y = "Level of Education",
+       title = "Distribution of Hours of Sleep Linked to Level of Education")
+  
+sleepedu
+```
+
+```{r}
+set.seed(1000)
+fit_obj <- stan_glm(data = data,
+                    formula = sleep ~ edu,
+                    refresh = 0)
+#print(fit_obj, view = FALSE, digits = 5)
+
+fit_obj %>%
+  tbl_regression() %>%
+  as_gt()
+```
+
+
+```{r}
+
+model3 <- lm(data = data, 
+         working ~ age + sex + race + famincome)
+summary(model3)
+
+```
+
+#shiny app code
+obj <- "housework"
+data %>%
+  ggplot(aes(x = obj)) +
+  geom_density()
+
+
+```{r}
+write.csv(data, "50proj/fullset.csv")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
