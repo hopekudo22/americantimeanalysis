@@ -29,7 +29,10 @@ cps <- atuscps
 time <- atusact
 resp <- atusresp
 
-#join cpc and resp files together by respondent's ID number
+# Join cpc and resp files together by respondent's ID number
+# Filter for relevant data points to reduce dataset size
+# Filter for only five years to reduce size
+# Use distinct() to avoid any duplications
 
 table <- left_join(cps, resp, by = c("tucaseid")) %>% 
 select(tucaseid, region, state, sex, age, edu, diary_mo, diary_day, race, famincome, tuyear, occup_code, labor_status, student_status,hh_size) %>%
@@ -176,11 +179,13 @@ o <- left_join(n, computeruse, by = c("tucaseid")) %>%
 o = subset(o, select = -c(tiercode, dur))
 
 #Get rid of duplicate rows
+
 data <- o %>%
   distinct() 
 data <- data[!duplicated(data$tucaseid), ]
 
 #Change N/A variables to value of 0
+
 data$sleep[which(is.na(data$sleep))] <- 0
 data$housework[which(is.na(data$housework))] <- 0 
 data$phonetime[which(is.na(data$phonetime))] <- 0 
@@ -197,6 +202,7 @@ data$computeruse[which(is.na(data$computeruse))] <- 0
 data$druguse[which(is.na(data$druguse))] <- 0 
 
 #Change min to hours
+
 data$sleep <- data$sleep / 60
 data$housework <- data$housework / 60
 data$phonetime <- data$phonetime / 60
@@ -216,6 +222,12 @@ data$druguse <- data$druguse / 60
 
 
 ```{r}
+
+# Create new dataset that summarizes the total time spent on each activity
+# dependent on state data. Use summarise(mean) since the number of respondents
+# from each state varies.
+# Use left_join to combine the columns of various activities
+
 # Sleep
 
 sleep1 <- data %>%
@@ -345,12 +357,6 @@ combo13%>%
 ```
 
 ```{r}
-combo13 %>%
-  ggplot(aes(x = mean(sleep))) +
-  geom_bar()
-```
-
-```{r}
 write.csv(combo13, "TimeAnalysis/combo13.csv")
 ```
 # Create a distribution, x = hours, y = frequency. Create a normal histogram for each state
@@ -359,6 +365,9 @@ write.csv(combo13, "TimeAnalysis/combo13.csv")
 # Need a statistical regression, y = hours
 
 ```{r}
+
+# Create general list of activities and time spent on them by state
+# Different from combo dataset because this one has more datapoints
 
 combined <- data %>%
   select(state, sleep, housework, phonetime, volunteer, sports, religion, 
@@ -371,24 +380,24 @@ write.csv(combined, "TimeAnalysis/combination.csv")
 ```
 
 ```{r}
+# Create a dataset that can graph multiple columns from dataframe
+# Utilize melt to combine the values
+# Set variable.name to series to encompass activities
+
 combomelt <- melt(combined, id.vars = 'state', variable.name = 'series')
 write.csv(combomelt, "TimeAnalysis/melt.csv")
-
-ggplot(combo, aes(x = state, y = value)) +
-  geom_density_ridges()
-  #geom_line(aes(color = series))
-
-#what i want
-ggplot(data = combo, aes(x = series)) +
-                geom_bar() +
-
 ```
 
 ```{r}
+# Testing out stan_glm regression models to apply to shiny app
+# Use set seed to randomly generate 10 samples
+# family = gaussian() is default for stan_glm, not necessary
+
 set.seed(15)
 fit_obj <- stan_glm(data = data,
                     formula = sleep ~ race,
                     refresh = 0)
+
 #print(fit_obj, view = FALSE, digits = 5)
 
 fit_obj %>%
