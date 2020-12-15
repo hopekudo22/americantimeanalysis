@@ -217,8 +217,8 @@ server <- function(input, output, session) {
         
 #State Comparisons
         output$Plot2 <- renderPlot({
-            ggplot(data = averages, aes(.data[[input$y]])) +
-                geom_histogram(state = "fill") +
+            ggplot(data = averages, aes(.data[[input$x]])) +
+                geom_bar() +
                 labs(title = "Activity Distributions by State") +
                 theme_linedraw()
         }, res = 96)

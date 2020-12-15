@@ -339,16 +339,14 @@ computeruse1 <- data %>%
 combo13 <- left_join(combo12, computeruse1, by = c("state"))
 
 combo13%>%
-  ungroup() %>%
-  rename(combo13, states = "state")
+  ungroup() 
+  #rename(combo13, states = "state")
 ```
 
 ```{r}
-sleep2 <- combo13 %>%
-  sleep2 %>%
-  ggplot(aes())
-
-
+combo13 %>%
+  ggplot(aes(x = mean(sleep), fill = state)) +
+  geom_bar()
 ```
 
 
