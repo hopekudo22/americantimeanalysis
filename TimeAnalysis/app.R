@@ -70,15 +70,18 @@ ui <- navbarPage(
              ),
     
     tabPanel("State Comparison",
-             mainPanel(
-               leafletOutput(outputId = "mymap"),
-               absolutePanel(top = 60, left = 20,
-                             checkboxInput("markers", "Depth", FALSE),
-                             checkboxInput("heat", "Heatmap", FALSE)
-                             )
-               
-             ),
-    )
+             fluidPage(
+               fluidRow(column(12,
+                               h3("Time Usage Distriubtions Based on State"),
+                               p("To further analyze the data, I filtered the information for specific states."))),
+               fluidRow(column(12,
+                               h4("Activities by State"),
+                               selectizeInput(inputId = "stateInput",
+                                              label = "State",
+                                              choices = unique(averages$state),
+                                              selected = "Hawaii"),
+                               plotOutput("Plot2")))
+             )),
              
   tabPanel("About",
            fluidPage(
@@ -211,13 +214,8 @@ server <- function(input, output, session) {
             
         })
         
-    map <- reactive ({
-
-      
-      
-    })
         
-        #new model
+#State Comparisons
         output$Plot2 <- renderPlot({
             ggplot(data = fulldata, aes(x = sleep, .data[[input$y]])) +
                 geom_histogram(state = "fill") +

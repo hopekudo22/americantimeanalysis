@@ -374,9 +374,17 @@ combo13 <- left_join(combo12, computeruse1, by = c("state"))
 
 combo13%>%
   ungroup() 
+```
+
+```{r}
+sleep2 <- combo13 %>%
+  sleep2 %>%
+  ggplot(aes())
 
 
 ```
+
+
 
 ```{r}
 write.csv(combo13, "TimeAnalysis/combo13.csv")
