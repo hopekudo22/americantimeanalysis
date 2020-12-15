@@ -60,8 +60,18 @@ ui <- navbarPage(
              p("This section provides an analysis of the Interactive Regression Tables
                displayed on the Sleep Models tab."),
              h3("Sleep and Family Income"),
-             p("The first model regresses"),
+             p("The first model regresses sleep and annual family income. 
+               Based on the Regression Table, it would appear those within the lower income 
+               brackets, such as 7500-9999, 10000-12499, 12500-14999, and 15000-19999 ($7500 - 
+               $20000), are likely to get slightly more sleep than those within middle or high
+               income brackets. It appears that those with higher income brackets such as $60000+
+               are likely to spend less time sleeping.
+               Unfortunately,not many respondents with a family income of $5000 or below, thus, 
+               there isn't much data for that bracket. I would assume that because of their 
+               poverty level income status, respondents who make less than 5000 have less 
+               flexibility in time."),
              h3("Sleep and Race"),
+             img(src = 'img1.png', align = "left"),
              p("This model demonstrates the characterist of race to sleep. It appears that 
                
                The Intercept is 8.8"),
