@@ -75,8 +75,16 @@ ui <- navbarPage(
              fluidPage(
                fluidRow(column(12,
                                h3("Time Usage Distriubtions Based on State"),
-                               p("To further analyze the data, I filtered the information 
-                                 for specific states."))),
+                               p("To further analyze the data, I filtered the time
+                               spent on various activities for specific states. The
+                               original dataset had a multitude of hyper-specific
+                               activities, therefore, I grouped them under broader
+                               categories as seen below in order to standardize and
+                               tidy the data to something more manageable. To 
+                                read more about specific activities and tiercodes
+                                recorded by the ATUS, click", a("here.", 
+                                href = "https://www.bls.gov/tus/lexiconnoex0318.pdf"))
+                               )),
                fluidRow(column(12,
                                h4("Activities by State"),
                                selectizeInput(inputId = "stateInput",
