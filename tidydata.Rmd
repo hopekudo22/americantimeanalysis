@@ -345,11 +345,9 @@ combo13%>%
 
 ```{r}
 combo13 %>%
-  ggplot(aes(x = mean(sleep), fill = state)) +
+  ggplot(aes(x = mean(sleep))) +
   geom_bar()
 ```
-
-
 
 ```{r}
 write.csv(combo13, "TimeAnalysis/combo13.csv")
@@ -358,6 +356,18 @@ write.csv(combo13, "TimeAnalysis/combo13.csv")
 # Compare states, display two plots on the page, create two different plots and set a default. Alphabetical set. Have them be automatically populated. Have two separate dropdowns. 
 
 # Need a statistical regression, y = hours
+
+```{r}
+
+combined <- data %>%
+  select(state, sleep, housework, phonetime, volunteer, sports, religion, 
+         eating, shopping, research_homework, class, working, tv, druguse,
+         computeruse) %>%
+  arrange(state)
+
+write.csv(combined, "TimeAnalysis/combination.csv")
+
+```
 
 
 ```{r}

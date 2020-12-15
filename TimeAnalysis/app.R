@@ -18,6 +18,7 @@ library(leaflet.extras)
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
 averages <- read.csv("combo13.csv")
+combination <- read.csv("combination.csv")
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
@@ -73,12 +74,13 @@ ui <- navbarPage(
              fluidPage(
                fluidRow(column(12,
                                h3("Time Usage Distriubtions Based on State"),
-                               p("To further analyze the data, I filtered the information for specific states."))),
+                               p("To further analyze the data, I filtered the information 
+                                 for specific states."))),
                fluidRow(column(12,
                                h4("Activities by State"),
                                selectizeInput(inputId = "stateInput",
                                               label = "State",
-                                              choices = unique(averages$state),
+                                              choices = unique(combination$state),
                                               selected = "Hawaii"),
                                plotOutput("Plot2")))
              )),
@@ -216,9 +218,13 @@ server <- function(input, output, session) {
         
         
 #State Comparisons
+        combinationState <- reactive({
+          filter(state == input$stateInput)
+        })
+        
         output$Plot2 <- renderPlot({
-            ggplot(data = averages, aes(.data[[input$x]])) +
-                geom_bar() +
+            ggplot(data = combination, aes(x = mean(sleep), .combination[[input$y]])) +
+                geom_histogram() +
                 labs(title = "Activity Distributions by State") +
                 theme_linedraw()
         }, res = 96)
