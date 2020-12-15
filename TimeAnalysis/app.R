@@ -15,7 +15,6 @@ library(Rcpp)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
-averages <- read.csv("combo13.csv")
 combination <- read.csv("combination.csv")
 melted <- read.csv("melt.csv")
 
