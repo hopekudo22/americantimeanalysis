@@ -20,7 +20,10 @@ library(dplyr)
 ```
 
 ```{r}
-data%>%
+
+# Testing out first graph plot from Shiny App
+
+data %>%
   ggplot(aes(x = sleep, fill = famincome)) +
   geom_histogram() +
   facet_wrap(~ famincome) +
@@ -35,7 +38,11 @@ data%>%
   theme_linedraw()
 ```
 
-```{r regression table}
+```{r}
+
+# Trial run for boxplot graphs on sleep models page
+# Focusing on income, race, sex, and level of education
+
 sleepincome <- data %>%
   ggplot(aes(x = sleep, y = famincome)) +
   geom_boxplot() +
@@ -68,36 +75,4 @@ sleepedu <- data %>%
        y = "Level of Education",
        title = "Distribution of Hours of Sleep Linked to Level of Education")
   
-```
-
-```{r}
-
-    output$Plot2 <- renderPlot({
-        data %>%
-            filter() %>%
-            ungroup(year) %>%
-            group_by(state) %>%
-            filter(state == input$select_state) %>%
-            ggplot(aes(x = year)) +
-            labs(y = "Percent") + 
-            ggtitle(input$select_state)
-    })
-
-```
-
-```{r}
-
-    tabPanel("State Comparison",
-             fluidPage(
-                 fluidRow(column(12,
-                                 h3("Time Usage Distriubtions Based on State"),
-                                 p("To further analyze the data, I filtered the information for specific states."))),
-                 fluidRow(column(12,
-                                 h4("Activities by State"),
-                                 selectizeInput(inputId = "stateInput",
-                                                label = "State",
-                                                choices = unique(fulldata$state), #add data set
-                                                selected = "Hawaii"),
-                                 plotOutput("Plot2")))
-                 ))
 ```
