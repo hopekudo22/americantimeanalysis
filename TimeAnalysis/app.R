@@ -20,6 +20,9 @@ melted <- read.csv("melt.csv")
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
+  
+  # Some lines go over 80 characters, yet it was simply aesthetically pleasing
+  # to leave them at more than 80 characters, espcially with a smaller screen
     
     theme = shinytheme("yeti"),
     "How Americans Spend Time During the Day",
@@ -168,6 +171,8 @@ server <- function(input, output, session) {
             theme_linedraw()
     })
 
+    # Create boxplot graph on sleep x family income
+    
     output$sleepincome <- renderPlot({
         sleepincome <- fulldata %>%
             ggplot(aes(x = sleep, y = famincome)) +
@@ -180,7 +185,8 @@ server <- function(input, output, session) {
         sleepincome
     })
         
-
+    # Create boxplot graph on sleep x race/ethnicity
+    
     output$sleeprace <- renderPlot ({
         sleeprace <- fulldata %>%
             ggplot(aes(x = sleep, y = race)) +
@@ -193,6 +199,8 @@ server <- function(input, output, session) {
         sleeprace
     })
     
+    # Create boxplot graph on sleep and sex
+    
     output$sleepgender <- renderPlot({
         sleepgender <- fulldata %>%
             ggplot(aes(x = sleep, y = sex)) +
@@ -204,6 +212,8 @@ server <- function(input, output, session) {
         
         sleepgender
     })
+    
+    # Create boxplot graph on sleep and education level
         
     output$sleepedu <- renderPlot ({
         sleepedu <- fulldata %>%
