@@ -109,7 +109,7 @@ ui <- navbarPage(
                                h3("About Me"),
                                p("My name is Hope Kudo and I'm a junior at Harvard studying Government and Psychology. As a proud
                                member of the Class of 2022 and Quincy House, living at home this semester has been quite a shake up,
-                               but this project has been a great to delve into interesting data and a great way to experiment with R!
+                               but this project has been a great way to delve into interesting data and a fun way to experiment with R!
                                I'm excited to put the skills I've learned this semester into use. I can be reached at hopekudo@college.harvard.edu. 
                                The code for this project can be found at my", a("GitHub page here.", href = "https://github.com/hopekud22/50proj"))
                       )
@@ -217,10 +217,9 @@ server <- function(input, output, session) {
         
 #State Comparisons
         output$Plot2 <- renderPlot({
-            ggplot(data = fulldata, aes(x = sleep, .data[[input$y]])) +
+            ggplot(data = averages, aes(.data[[input$y]])) +
                 geom_histogram(state = "fill") +
-                labs(title = "Demographic Distributions by State",
-                     x = "States") +
+                labs(title = "Activity Distributions by State") +
                 theme_linedraw()
         }, res = 96)
         

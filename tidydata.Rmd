@@ -221,47 +221,19 @@ summary(model1)
 
 
 ```{r}
-hawaii <- data %>%
-  filter(state == "HI") 
-
-fit_obj <- stan_glm(data = hawaii,
-                    formula = sleep,
-                    refresh = 0)
-
-fit_obj %>%
-  tbl_regression() %>%
-  as_gt()
-
-fit_obj_posterior <- posterior_predict(fit_obj, newdata = hawaii) %>%
-  as_tibble() %>% 
-  mutate_all(as.numeric)
-
-fit_obj_posterior %>%
-
-  ggplot(aes(x = hours)) +
-  geom_histogram(aes(y = after_stat(count/sum(count))),
-    alpha = 0.5, 
-                 bins = 90, 
-                 position = "identity")
-
-```
-
-```{r}
 # Sleep
 
 sleep1 <- data %>%
-  select(state, sleep, housework, phonetime, volunteer, sports, religion, 
-         eating, shopping, research_homework, class, working, tv, druguse,
-         computeruse) %>%
+  select(state, sleep) %>%
   group_by(state) %>%
-  summarise(mean(sleep)) 
+  summarise(mean(sleep, na.rm = TRUE)) 
 
 # Housework
 
 housework1 <- data %>%
   select(state, housework) %>%
   group_by(state) %>%
-  summarise(mean(housework)) 
+  summarise(mean(housework, na.rm = TRUE)) 
 
 combo1 <- left_join(sleep1, housework1, by = c("state")) 
 
@@ -270,7 +242,7 @@ combo1 <- left_join(sleep1, housework1, by = c("state"))
 phonetime1 <- data %>%
   select(state, phonetime) %>%
   group_by(state) %>%
-  summarise(mean(phonetime))
+  summarise(mean(phonetime, na.rm = TRUE))
 
 combo2 <- left_join(combo1, phonetime1, by = c("state"))
 
@@ -279,7 +251,7 @@ combo2 <- left_join(combo1, phonetime1, by = c("state"))
 volunteer1 <- data %>%
   select(state, volunteer) %>%
   group_by(state) %>%
-  summarise(mean(volunteer))
+  summarise(mean(volunteer, na.rm = TRUE))
 
 combo3 <- left_join(combo2, volunteer1, by = c("state"))
 
@@ -288,7 +260,7 @@ combo3 <- left_join(combo2, volunteer1, by = c("state"))
 sports1 <- data %>%
   select(state, sports) %>%
   group_by(state) %>%
-  summarise(mean(sports))
+  summarise(mean(sports, na.rm = TRUE))
 
 combo4 <- left_join(combo3, sports1, by = c("state")) 
 
@@ -297,7 +269,7 @@ combo4 <- left_join(combo3, sports1, by = c("state"))
 religion1 <- data %>%
   select(state, religion) %>%
   group_by(state) %>%
-  summarise(mean(religion))
+  summarise(mean(religion, na.rm = TRUE))
 
 combo5 <- left_join(combo4, religion1, by = c("state"))
 
@@ -306,7 +278,7 @@ combo5 <- left_join(combo4, religion1, by = c("state"))
 eating1 <- data %>%
   select(state, eating) %>%
   group_by(state) %>%
-  summarise(mean(eating))
+  summarise(mean(eating, na.rm = TRUE))
 
 combo6 <- left_join(combo5, eating1, by = c("state"))
 
@@ -315,7 +287,7 @@ combo6 <- left_join(combo5, eating1, by = c("state"))
 shopping1 <- data %>%
   select(state, shopping) %>%
   group_by(state) %>%
-  summarise(mean(shopping))
+  summarise(mean(shopping, na.rm = TRUE))
 
 combo7 <- left_join(combo6, shopping1, by = c("state"))
 
@@ -323,7 +295,7 @@ combo7 <- left_join(combo6, shopping1, by = c("state"))
 researchhomework1 <- data %>%
   select(state, research_homework) %>%
   group_by(state) %>%
-  summarise(mean(research_homework))
+  summarise(mean(research_homework, na.rm = TRUE))
 
 combo8 <- left_join(combo7, researchhomework1, by = c("state"))
 
@@ -332,7 +304,7 @@ combo8 <- left_join(combo7, researchhomework1, by = c("state"))
 class1 <- data %>%
   select(state, class) %>%
   group_by(state) %>%
-  summarise(mean(class))
+  summarise(mean(class, na.rm = TRUE))
 
 combo9 <- left_join(combo8, class1, by = c("state")) 
 
@@ -341,7 +313,7 @@ combo9 <- left_join(combo8, class1, by = c("state"))
 working1 <- data %>%
   select(state, working) %>%
   group_by(state) %>%
-  summarise(mean(working))
+  summarise(mean(working, na.rm = TRUE))
 
 combo10 <- left_join(combo9, working1, by = c("state"))
 
@@ -350,7 +322,7 @@ combo10 <- left_join(combo9, working1, by = c("state"))
 tv1 <- data %>%
   select(state, tv) %>%
   group_by(state) %>%
-  summarise(mean(tv))
+  summarise(mean(tv, na.rm = TRUE))
 
 combo11 <- left_join(combo10, tv1, by = c("state"))
 
@@ -359,7 +331,7 @@ combo11 <- left_join(combo10, tv1, by = c("state"))
 druguse1 <- data %>%
   select(state, druguse) %>%
   group_by(state) %>%
-  summarise(mean(druguse))
+  summarise(mean(druguse, na.rm = TRUE))
 
 combo12 <- left_join(combo11, druguse1, by = c("state")) 
 
@@ -368,7 +340,7 @@ combo12 <- left_join(combo11, druguse1, by = c("state"))
 computeruse1 <- data %>%
   select(state, computeruse) %>%
   group_by(state) %>%
-  summarise(mean(computeruse)) 
+  summarise(mean(computeruse, na.rm = TRUE)) 
 
 combo13 <- left_join(combo12, computeruse1, by = c("state"))
 

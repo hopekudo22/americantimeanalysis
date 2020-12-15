@@ -1,0 +1,34 @@
+---
+title: "unused"
+author: "Hope Kudo"
+date: "12/14/2020"
+output: html_document
+---
+
+```{r}
+hawaii <- data %>%
+  filter(state == "HI") 
+
+fit_obj <- stan_glm(data = hawaii,
+                    formula = sleep,
+                    refresh = 0)
+
+fit_obj %>%
+  tbl_regression() %>%
+  as_gt()
+
+fit_obj_posterior <- posterior_predict(fit_obj, newdata = hawaii) %>%
+  as_tibble() %>% 
+  mutate_all(as.numeric)
+
+fit_obj_posterior %>%
+
+  ggplot(aes(x = hours)) +
+  geom_histogram(aes(y = after_stat(count/sum(count))),
+    alpha = 0.5, 
+                 bins = 90, 
+                 position = "identity")
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
