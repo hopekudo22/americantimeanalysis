@@ -371,11 +371,16 @@ write.csv(combined, "TimeAnalysis/combination.csv")
 ```
 
 ```{r}
-combo <- melt(combined, id.vars = 'state', variable.name = 'series')
+combomelt <- melt(combined, id.vars = 'state', variable.name = 'series')
+write.csv(combomelt, "TimeAnalysis/melt.csv")
 
 ggplot(combo, aes(x = state, y = value)) +
   geom_density_ridges()
   #geom_line(aes(color = series))
+
+#what i want
+ggplot(data = combo, aes(x = series)) +
+                geom_bar() +
 
 ```
 

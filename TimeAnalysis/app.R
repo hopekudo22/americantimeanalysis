@@ -19,6 +19,7 @@ library(leaflet.extras)
 fulldata <- read.csv("fullset.csv")
 averages <- read.csv("combo13.csv")
 combination <- read.csv("combination.csv")
+melted <- read.csv("melt.csv")
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
@@ -219,16 +220,22 @@ server <- function(input, output, session) {
         
 #State Comparisons
         combinationState <- reactive({
-          filter(state == input$stateInput)
+          stateactivity <- melted %>%
+          filter(state == input$stateInput) 
         })
-        
-        combo <- melt(combined, id.vars = 'state', variable.name = 'series')
+
         
         output$Plot2 <- renderPlot({
-            ggplot(data = combo, aes(x = state, y = value)) +
-                geom_histogram(bins = 30, bindiwth = 0.2) +
-                labs(title = "Activity Distributions by State") +
-                theme_linedraw()
+            ggplot(data = combinationState(), aes(x = series, y = value, fill = series)) +
+            geom_boxplot(alpha = 0.3) +
+                labs(title = "Distribution of Activities by State",
+                     x = "Activity",
+                     y = "Hours") +
+            scale_fill_discrete(name = "Activities") +
+            theme(legend.position = "none") +
+            scale_color_manual(values = c("#FFABAB", "#FFCBC1", "#FFC8A2", "#FFFFD1", "#F3FFE3",
+                                          "#E7FFAC", "#AFF8DB", "#C4FAF8", "#85E3FF", "#6EB5FF",
+                                          "#B5B9FF", "#97A2FF", "#D5AAFF", "#FFB5E8"))
         }, res = 96)
         
     }
