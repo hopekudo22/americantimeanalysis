@@ -148,6 +148,9 @@ ui <- navbarPage(
     
 server <- function(input, output, session) {
         
+  # Display multiple graph based on annual family income
+  # Use facet_wrap to accomplish
+  
     output$Plot1 <- renderPlot({
         fulldata %>%
             ggplot(aes(x = sleep, fill = famincome)) +
@@ -174,7 +177,7 @@ server <- function(input, output, session) {
                  y = "Family Income ($)",
                  title = "Distribution of Hours of Sleep Linked to Income")
         
-        sleepincome
+        #sleepincome
     })
         
 
@@ -187,7 +190,7 @@ server <- function(input, output, session) {
                  y = "Race",
                  title = "Distribution of Hours of Sleep Linked to Race")
         
-        sleeprace
+        #sleeprace
     })
     
     output$sleepgender <- renderPlot({
@@ -199,7 +202,7 @@ server <- function(input, output, session) {
                  y = "Sex",
                  title = "Distribution of Hours of Sleep Linked to Sex")
         
-        sleepgender
+        #sleepgender
     })
         
     output$sleepedu <- renderPlot ({
@@ -211,10 +214,11 @@ server <- function(input, output, session) {
                  y = "Level of Education",
                  title = "Distribution of Hours of Sleep Linked to Level of Education")
         
-        sleepedu
+        #sleepedu
     })
         
-    #Formulas for regression, create input in order to have dropdown options
+    # Formulas for regression, create input in order to have dropdown options
+    # Map the various factors to sleep
     
         regressiontableInput <- reactive ({
             switch(input$regressiontable,
@@ -226,6 +230,10 @@ server <- function(input, output, session) {
         })
         
         #Interactive Regression Table Model
+        
+        # Create selectable regression tables based on Input function above
+        # family = gaussian() is default, but it wouldn't work without placing
+        # it in the stan_glm, so I added it there
         
         output$regressiontable <- render_gt({
             formula <- regressiontableInput()
@@ -244,11 +252,17 @@ server <- function(input, output, session) {
         
         
 #State Comparisons
+        
         combinationState <- reactive({
           stateactivity <- melted %>%
           filter(state == input$stateInput) 
         })
 
+        # Create a second plot that allows people to select state
+        # Need to display multiple activities within columns
+        # Utilize melt and input combinationState
+        # Use boxplots to demonstrate information
+        # Scale_color_manual to list specific pastel colors
         
         output$Plot2 <- renderPlot({
             ggplot(data = combinationState(), aes(x = series, y = value, fill = series)) +
