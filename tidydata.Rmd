@@ -213,12 +213,6 @@ data$druguse <- data$druguse / 60
 
 ```
 
-```{r}
-model1 <- lm(data = data, 
-         eating ~ age + sex + race + famincome)
-summary(model1)
-```
-
 
 ```{r}
 # Sleep
@@ -367,17 +361,6 @@ write.csv(combo13, "TimeAnalysis/combo13.csv")
 
 # Need a statistical regression, y = hours
 
-```{r}
-model <- lm(data = data, 
-         sleep ~ state + age + sex + race)
-
-summary(model)
-
-# Make a distribution for each state, refer to exam 3, x = estimates, y = variables (states, race, income)
-# add a table and describe what its doing, find format from the textbook. 
-```
-#*** = prob of getting a result this extreme given null hypotheis that sex is equal is extremely unlikely, thus, we would trust the values generated
-
 
 ```{r}
 set.seed(15)
@@ -392,21 +375,6 @@ fit_obj %>%
 
 fit_obj
 ```
-
-
-```{r}
-
-model3 <- lm(data = data, 
-         working ~ age + sex + race + famincome)
-summary(model3)
-
-```
-
-#shiny app code
-obj <- "housework"
-data %>%
-  ggplot(aes(x = obj)) +
-  geom_density()
 
 
 ```{r}

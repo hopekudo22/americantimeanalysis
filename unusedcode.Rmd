@@ -5,7 +5,7 @@ date: "12/14/2020"
 output: html_document
 ---
 
-```{r}
+```{r state}
 hawaii <- data %>%
   filter(state == "HI") 
 
@@ -30,5 +30,20 @@ fit_obj_posterior %>%
                  position = "identity")
 ```
 
+```{r model}
+model <- lm(data = data, 
+         sleep ~ state + age + sex + race)
 
+summary(model)
+
+
+model3 <- lm(data = data, 
+         working ~ age + sex + race + famincome)
+summary(model3)
+
+model1 <- lm(data = data, 
+         eating ~ age + sex + race + famincome)
+summary(model1)
+
+```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
