@@ -11,9 +11,7 @@ library(gtsummary)
 library(ggthemes)
 library(rstanarm)
 library(broom.mixed)
-library(MASS)
-library(leaflet)
-library(leaflet.extras)
+library(Rcpp)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
