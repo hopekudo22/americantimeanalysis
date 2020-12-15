@@ -71,14 +71,24 @@ ui <- navbarPage(
                poverty level income status, respondents who make less than 5000 have less 
                flexibility in time."),
              h3("Sleep and Race"),
-             img(src = 'img1.png', width = "400", height = "300", align = "left"),
-             p("This model demonstrates the characterist of race to sleep. It appears that 
-               
-               The Intercept is 8.8"),
-             h3("Sleep and Gender"),
-             p("This model..."),
+             p("This model regresses the characteristic of race to sleep. I expected to find 
+             some type of correlation between the two factors, however, there appears to be
+             little correlation between them. It appears that
+             White people are almost completely insignificant for predicting the number of
+             hours of sleep in a night. The Intercept's Median is 8.8 and the SD is 0.0."),
+             h3("Sleep and Sex"),
+             p("This model regresses sleep and sex (Male, Female). Based on the Regression
+               Table, it would appear that Females on average, are more likely to spend more
+               time sleeping compared to Males. We can be 95% confident of this prediction
+               between .17 to .34. The interval is the set of values for which a hypothesis 
+               test to the level of 5% cannot be rejected."),
              h3("Sleep and Level of Education"),
-             p("This model...")
+             p("This model shows a regression between sleep and Level of Education ranging
+               from a high school diploma to a doctoral degree. It appears that those with
+               a high school diploma or less than, are likely to sleep the average expected
+               amount. Alternatively, as education level increases, it appears that the less
+               sleep individuals will get. Those with Bachelors, Masters, Professional, and
+               Doctoral degrees all receive a significantly lower average of sleep.")
              ),
     
     tabPanel("State Comparison",

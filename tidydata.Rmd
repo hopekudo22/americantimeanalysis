@@ -395,7 +395,7 @@ write.csv(combomelt, "TimeAnalysis/melt.csv")
 
 set.seed(15)
 fit_obj <- stan_glm(data = data,
-                    formula = sleep ~ race,
+                    formula = sleep ~ edu,
                     refresh = 0)
 
 #print(fit_obj, view = FALSE, digits = 5)
