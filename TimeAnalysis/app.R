@@ -17,7 +17,7 @@ library(leaflet.extras)
 
 #Load ATUS data
 fulldata <- read.csv("fullset.csv")
-
+averages <- read.csv("combo13.csv")
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
@@ -212,10 +212,9 @@ server <- function(input, output, session) {
         })
         
     map <- reactive ({
-      map <- fulldata %>%
-        select(state, sleep, housework, phonetime, volunteer, sports, religion, 
-               eating, shopping, research_homework, class, working, tv, druguse,
-               computeruse)
+
+      
+      
     })
         
         #new model
