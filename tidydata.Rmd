@@ -21,6 +21,7 @@ library(gtsummary)
 library(broom.mixed)
 library(gt)
 library(ggridges)
+library(reshape2)
 ```
 
 ```{r}
@@ -369,6 +370,14 @@ write.csv(combined, "TimeAnalysis/combination.csv")
 
 ```
 
+```{r}
+combo <- melt(combined, id.vars = 'state', variable.name = 'series')
+
+ggplot(combo, aes(x = state, y = value)) +
+  geom_density_ridges()
+  #geom_line(aes(color = series))
+
+```
 
 ```{r}
 set.seed(15)

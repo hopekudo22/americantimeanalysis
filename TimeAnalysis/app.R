@@ -222,9 +222,11 @@ server <- function(input, output, session) {
           filter(state == input$stateInput)
         })
         
+        combo <- melt(combined, id.vars = 'state', variable.name = 'series')
+        
         output$Plot2 <- renderPlot({
-            ggplot(data = combination, aes(x = mean(sleep), .combination[[input$y]])) +
-                geom_histogram() +
+            ggplot(data = combo, aes(x = state, y = value)) +
+                geom_histogram(bins = 30, bindiwth = 0.2) +
                 labs(title = "Activity Distributions by State") +
                 theme_linedraw()
         }, res = 96)
