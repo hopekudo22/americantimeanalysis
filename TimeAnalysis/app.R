@@ -169,7 +169,7 @@ server <- function(input, output, session) {
     })
 
     output$sleepincome <- renderPlot({
-        sleepincome <- data %>%
+        sleepincome <- fulldata %>%
             ggplot(aes(x = sleep, y = famincome)) +
             geom_boxplot() +
             theme_bw() +
@@ -177,12 +177,12 @@ server <- function(input, output, session) {
                  y = "Family Income ($)",
                  title = "Distribution of Hours of Sleep Linked to Income")
         
-        #sleepincome
+        sleepincome
     })
         
 
     output$sleeprace <- renderPlot ({
-        sleeprace <- data %>%
+        sleeprace <- fulldata %>%
             ggplot(aes(x = sleep, y = race)) +
             geom_boxplot() +
             theme_bw() +
@@ -190,11 +190,11 @@ server <- function(input, output, session) {
                  y = "Race",
                  title = "Distribution of Hours of Sleep Linked to Race")
         
-        #sleeprace
+        sleeprace
     })
     
     output$sleepgender <- renderPlot({
-        sleepgender <- data %>%
+        sleepgender <- fulldata %>%
             ggplot(aes(x = sleep, y = sex)) +
             geom_boxplot() +
             theme_bw() +
@@ -202,11 +202,11 @@ server <- function(input, output, session) {
                  y = "Sex",
                  title = "Distribution of Hours of Sleep Linked to Sex")
         
-        #sleepgender
+        sleepgender
     })
         
     output$sleepedu <- renderPlot ({
-        sleepedu <- data %>%
+        sleepedu <- fulldata %>%
             ggplot(aes(x = sleep, y = edu)) +
             geom_boxplot() +
             theme_bw() +
@@ -214,7 +214,7 @@ server <- function(input, output, session) {
                  y = "Level of Education",
                  title = "Distribution of Hours of Sleep Linked to Level of Education")
         
-        #sleepedu
+        sleepedu
     })
         
     # Formulas for regression, create input in order to have dropdown options
