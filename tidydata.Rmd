@@ -42,7 +42,13 @@ select(tucaseid, region, state, sex, age, edu, diary_mo, diary_day, race, faminc
 ```
 
 ```{r}
-#Add variables as columns to dataframe
+# Add variables as columns to dataframe
+# Create general categories to house specific activities
+# Do this by referring to activity guide and filter by tiercode
+# Use left_join to add columns to existing dataframe 
+# Rename column names with mutate to display time spent, change from dur
+# Remove unnecessary columns with subset
+
 #Sleep
 sleep <- time %>%
   ungroup() %>% 
@@ -357,23 +363,18 @@ combo13%>%
 ```
 
 ```{r}
-write.csv(combo13, "TimeAnalysis/combo13.csv")
-```
-# Create a distribution, x = hours, y = frequency. Create a normal histogram for each state
-# Compare states, display two plots on the page, create two different plots and set a default. Alphabetical set. Have them be automatically populated. Have two separate dropdowns. 
-
-# Need a statistical regression, y = hours
-
-```{r}
 
 # Create general list of activities and time spent on them by state
 # Different from combo dataset because this one has more datapoints
+# Use arrange by state to sort the states alphabetically
 
 combined <- data %>%
   select(state, sleep, housework, phonetime, volunteer, sports, religion, 
          eating, shopping, research_homework, class, working, tv, druguse,
          computeruse) %>%
   arrange(state)
+
+# Create a new csv file to use for Shiny App
 
 write.csv(combined, "TimeAnalysis/combination.csv")
 
