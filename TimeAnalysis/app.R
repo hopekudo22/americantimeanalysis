@@ -71,7 +71,7 @@ ui <- navbarPage(
                poverty level income status, respondents who make less than 5000 have less 
                flexibility in time."),
              h3("Sleep and Race"),
-             img(src = 'img1.png', align = "left"),
+             img(src = 'img1.png', width = "400", height = "300", align = "left"),
              p("This model demonstrates the characterist of race to sleep. It appears that 
                
                The Intercept is 8.8"),
