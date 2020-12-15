@@ -261,9 +261,9 @@ sleep1 <- data %>%
 housework1 <- data %>%
   select(state, housework) %>%
   group_by(state) %>%
-  summarise(mean(housework))
+  summarise(mean(housework)) 
 
-combo1 <- left_join(sleep1, housework1, by = c("state"))
+combo1 <- left_join(sleep1, housework1, by = c("state")) 
 
 # Phonetime
 
@@ -290,7 +290,7 @@ sports1 <- data %>%
   group_by(state) %>%
   summarise(mean(sports))
 
-combo4 <- left_join(combo3, sports1, by = c("state"))
+combo4 <- left_join(combo3, sports1, by = c("state")) 
 
 # Religion
 
@@ -334,7 +334,7 @@ class1 <- data %>%
   group_by(state) %>%
   summarise(mean(class))
 
-combo9 <- left_join(combo8, class1, by = c("state"))
+combo9 <- left_join(combo8, class1, by = c("state")) 
 
 # Working
 
@@ -361,7 +361,7 @@ druguse1 <- data %>%
   group_by(state) %>%
   summarise(mean(druguse))
 
-combo12 <- left_join(combo11, druguse1, by = c("state"))
+combo12 <- left_join(combo11, druguse1, by = c("state")) 
 
 # Computer Use
 
@@ -370,13 +370,16 @@ computeruse1 <- data %>%
   group_by(state) %>%
   summarise(mean(computeruse)) 
 
-combo13 <- left_join(combo12, computeruse1, by = c("state")) %>%
-    mutate("Avg Comp. Use" = mean(computeruse))
+combo13 <- left_join(combo12, computeruse1, by = c("state"))
 
 combo13%>%
   ungroup() 
 
-combo13
+
+```
+
+```{r}
+write.csv(combo13, "TimeAnalysis/combo13.csv")
 ```
 # Create a distribution, x = hours, y = frequency. Create a normal histogram for each state
 # Compare states, display two plots on the page, create two different plots and set a default. Alphabetical set. Have them be automatically populated. Have two separate dropdowns. 
